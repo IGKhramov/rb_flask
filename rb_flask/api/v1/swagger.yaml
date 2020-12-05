@@ -1,0 +1,99 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: API tryout
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/api/v1"
+
+# Paths supported by the server application
+paths:
+  /sounds/play:
+    get:
+      operationId: "api.v1.sounds.play"
+      tags:
+        - "Play"
+      summary: "Play sounds"
+      description: "Playing specified sound file(s) <times> times with interval <interval> sec"
+      responses:
+        200:
+          description: "Playing"
+        404:
+          description: File not found
+      parameters:
+        - name: files
+          in: query
+          type: string
+          description: 'Sound file names comma separated'
+          required: false
+        - name: times
+          in: query
+          type: integer
+          description: 'number of repeating'
+          required: false
+        - name: interval
+          in: query
+          type: integer
+          description: 'interval in sec between repeats'
+          required: false
+  /sounds:
+    get:
+      operationId: "api.v1.sounds.read_list"
+      tags:
+        - "Sounds"
+      summary: "Get list of files"
+      description: "Returns list of available sounds files  on server to play"
+      responses:
+        200:
+          description: "Successful got list of files"
+          schema:
+            type: "array"
+            items:
+              properties:
+                name:
+                  type: "string"
+                size:
+                  type: "string"
+                mdts:
+                  type: "string"
+    post:
+      tags:
+        - "Sounds"
+      summary: Upload file
+      operationId: api.v1.sounds.upload_file
+      description: Upload sound file to server
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: file
+          type: file
+          description: "Path to uploading file"
+      responses:
+        200:
+          description: "Successfully uploaded"
+        400:
+          description: Bad request
+        422:
+          description: Not a soud file
+    delete:
+      tags:
+        - Sounds
+      summary: Delete file
+      operationId: api.v1.sounds.delete_file
+      parameters:
+        - in: query
+          name: file
+          type: string
+          description: "File to delete"
+      responses:
+        204:
+          description: "Successfully deleted"
+        400:
+          description: Bad request
+        404:
+          description: Not found

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Application Home Page</title>
+<style>
+table, td, th {
+  border: 1px solid black;
+}
+tbody tr:nth-child(odd) {
+  background-color: #fbfbfb;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f0fff0;
+}
+
+tbody tr {
+  font-family: 'Helvetica';
+  padding: 20px;
+  background-image: url(noise.png);
+}
+
+table {
+  width: 90%;
+  border-collapse: collapse;
+  background-color: #fbfbfb;
+}
+caption {
+  font-family: 'Helvetica ', cursive;
+  padding: 20px;
+  font-style: italic;
+  caption-side: bottom;
+  color: #666;
+  text-align: right;
+  letter-spacing: 1px;
+}
+
+table.blueRows {
+  font-family: "Lucida Console", Monaco, monospace;
+  border: 0px solid #FFFFFF;
+  width: 90%;
+  text-align: center;
+  border-collapse: collapse;
+}
+table.blueRows td, table.blueRows th {
+  border: 1px solid #FFFFFF;
+  padding: 4px 2px;
+}
+table.blueRows tbody td {
+  font-size: 12px;
+}
+table.blueRows tbody td:nth-child(1) {
+    text-align: left;
+    padding: 8px 10px
+}
+table.blueRows tr:nth-child(even) {
+  background: #E0E4F5;
+}
+
+table.blueRows thead {
+  background: #10456F;
+  border-bottom: 1px solid #000000;
+}
+table.blueRows thead th {
+  font-family: Tahoma, Geneva, sans-serif;
+  font-size: 12px;
+  color: #FFFFFF;
+  text-align: center;
+  border-left: 0px solid #FFFFFF;
+  padding: 10px 10px;
+}
+table.blueRows thead th:first-child {
+  border-left: none;
+}
+
+table.blueRows tfoot {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333333;
+  background: #D0E4F5;
+  border-top: 3px solid #444444;
+}
+table.blueRows tfoot td {
+  font-size: 12px;
+}
+
+
+</style>
+</head>
+<body>
+    <h3>
+        <a href="api/v1/ui">Swagger API</a>
+    </h3>
+        <table class="blueRows">
+            <thead>
+            <tr>
+
+                <th>File</th>
+                <th>Size</th>
+                <th>Last modifired</th>
+                <th>Play</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in files %}
+            <tr>
+                <td>{{ file.name }}</td>
+                <td>{{ file.size }}</td>
+                <td>{{ file.mdts }}</td>
+                <td>
+                    <button onclick="playFile('{{ file.name }}')"> > </button>
+                </td>
+                <td>
+                    <button onclick="deleteFile('{{ file.name }}')"> - </button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        <tfoot><tr><td colspan="5">
+            <form method="post" enctype="multipart/form-data" action="api/v1/sounds">
+                <label for="fileName" >File: </label>
+            <input id="fileName" type="file" name="file">
+            <input type="submit" value="Upload File" name="submit" />
+            </form>
+        </td></tr></tfoot>
+        </table>
+
+</body>
+</html>
+
+<script>
+function playFile(file) {
+  fetch("api/v1/sounds/play?files="+file)
+    .then(data=>{return data.json()})
+    .then(res=>{console.log(res)})
+}
+
+function deleteFile(file) {
+    console.log('Delete: '+file)
+  fetch("api/v1/sounds?file="+file, {method: 'DELETE'})
+    .then(data=>{return data.json()})
+    .then(res=>{console.log(res)})
+}
+
+function aa() {
+  console.log('Upload');
+  fetch("api/v1/sounds")
+    .then(data=>{return data.json()})
+    .then(res=>{console.log(res)})
+}
+
+</script>
+
+
