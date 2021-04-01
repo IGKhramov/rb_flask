@@ -1,2 +1,2 @@
 # rb_flask
-baspberry pi play sound api
+raspberry pi play sound api
